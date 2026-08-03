@@ -13,7 +13,7 @@ placeholders; the structure, skills, agents and rules are exactly what runs ever
 2. [Three ways to engage AI](#three-ways-to-engage-ai) - the move: from doing the work to directing it
 3. [What the system optimizes for](#what-the-system-optimizes-for) - the objective, and its two bounds
 4. [The system](#the-system) - one repo, one pipeline, one compounding loop
-5. [Steal this](#steal-this) - what to build first in your own stack
+5. [What is here, and what stayed home](#what-is-here-and-what-stayed-home) - the boundary of this repo
 
 ## Where analytics sits in an org
 
@@ -136,27 +136,17 @@ the only route from one person's private memory into the shared repo, and it pas
 
 Each week's sessions start from a richer baseline than the last. That is the compounding.
 
-## Steal this
+## What is here, and what stayed home
 
 ![Repo map: what lives where and why](assets/repo-map.png)
 
-The order that worked, if you are building your own:
-
-1. **Write the traps.** Start `CLAUDE.md` with a one-screen map and five ways your stack returns
-   plausible wrong numbers. This pays for itself on day one.
-2. **Add the exploration and QA agents.** Context isolation for the expensive parts, independent
-   re-derivation for anything a stakeholder will see.
-3. **Add `/capture` and `/promote`.** The compounding loop, and the discipline of one fact, one
-   home.
-4. **Turn recurring procedures into skills**, one correction at a time. A skill is the postmortem
-   you never have to re-learn. Guard the edges: every skill here stops at the decision boundary -
-   drafts but never sends, builds but never deploys without a checkpoint.
-
-Then replace the placeholders (`your-gcp-project`, `analytics_XXXXXXXXX`, the tracker ids) and
-delete what your stack does not need. Three things are deliberately not in this repo: the `docs/`
-tree (the startup's data dictionary stays home; the map shows its shape), credentials (the
-[settings](.claude/settings.json) deny even *reading* key files - an agent that cannot read a
-key cannot leak it), and private memory (local to each machine, bridged only by `/promote`).
+The harness in this repo is complete and real: `CLAUDE.md`, the six skills, the three agents, the
+hook, the settings. Every skill stops at a decision boundary - drafts but never sends, builds but
+never deploys without a checkpoint - because the judgment calls are the part that stays human.
+Three things deliberately stayed home: the `docs/` tree (the startup's data dictionary; the map
+shows its shape), credentials (the [settings](.claude/settings.json) deny even *reading* key
+files - an agent that cannot read a key cannot leak it), and private memory (local to each
+machine, bridged only by `/promote`).
 
 The honest caveat, back at the org question this started with: the harness did not remove the
 analyst. It moved the analyst up a level - from writing every query to directing the system that
