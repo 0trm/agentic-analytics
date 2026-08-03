@@ -52,23 +52,23 @@
 <!-- arrows -->
 <line x1="420" y1="138" x2="750" y2="220" stroke="#000"/>
 <path d="M 758 220 L 750 215.5 L 749.2 222.7 Z" fill="#000" stroke="#000"/>
-<text x="590" y="163" text-anchor="middle" font-size="10" fill="#000">always &#183; the whole file</text>
+<text x="585" y="172" text-anchor="middle" font-size="10" fill="#000" transform="rotate(14 585 172)">always &#183; the whole file</text>
 
 <line x1="420" y1="230" x2="750" y2="276" stroke="#000"/>
 <path d="M 758 277 L 750.4 272.9 L 749.4 280 Z" fill="#000" stroke="#000"/>
-<text x="590" y="240" text-anchor="middle" font-size="10" fill="#000">names only &#183; body on invoke</text>
+<text x="585" y="246" text-anchor="middle" font-size="10" fill="#000" transform="rotate(7.9 585 246)">names only &#183; body on invoke</text>
 
 <line x1="420" y1="322" x2="750" y2="330" stroke="#000"/>
 <path d="M 758 330 L 750.7 326.5 L 750.5 333.7 Z" fill="#000" stroke="#000"/>
-<text x="590" y="314" text-anchor="middle" font-size="10" fill="#000">index only &#183; entries on recall</text>
+<text x="585" y="319" text-anchor="middle" font-size="10" fill="#000" transform="rotate(1.4 585 319)">index only &#183; entries on recall</text>
 
 <line x1="420" y1="414" x2="750" y2="384" stroke="#000"/>
 <path d="M 758 383 L 750.4 380.2 L 751.1 387.4 Z" fill="#000" stroke="#000"/>
-<text x="590" y="388" text-anchor="middle" font-size="10" fill="#000">on demand</text>
+<text x="585" y="392" text-anchor="middle" font-size="10" fill="#000" transform="rotate(-5.2 585 392)">on demand</text>
 
 <line x1="420" y1="506" x2="750" y2="440" stroke="#000"/>
 <path d="M 758 438 L 750.2 436 L 751.6 443.1 Z" fill="#000" stroke="#000"/>
-<text x="590" y="462" text-anchor="middle" font-size="10" fill="#000">per task</text>
+<text x="585" y="466" text-anchor="middle" font-size="10" fill="#000" transform="rotate(-11.3 585 466)">per task</text>
 
 <!-- footers -->
 <text x="54" y="588" font-size="10" fill="#000" font-family="Monaco, monospace">one fact, one home &#183; five stores</text>
