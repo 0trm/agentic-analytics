@@ -76,6 +76,8 @@ so no session assumes data that does not exist yet, and
 [`settings.json`](.claude/settings.json) allowlists a narrow set of routine commands while
 denying `bq rm`/`bq cp` and reads of the credential paths outright.
 
+![The harness: model plus tools plus skills, on two rails the harness enforces itself](assets/harness.png)
+
 ### One repo is the whole system
 
 Knowledge and the tooling that operates on it live in one clone. Open the repo in Claude Code and
