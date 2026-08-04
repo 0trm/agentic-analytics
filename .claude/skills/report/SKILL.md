@@ -7,8 +7,8 @@ user-invocable: true
 
 # report
 
-Step 11 of the analytics pipeline: delivery. The analysis is done; this turns it into the thing a
-stakeholder reads.
+The delivery phase of the analytics pipeline (step 11 of its full numbering). The analysis is
+done; this turns it into the thing a stakeholder reads.
 
 "Evidence" always means [evidence.dev](https://evidence.dev), the BI-as-code tool where markdown
 pages embed SQL. Never a Google Doc, a ClickUp doc or an RTF.
@@ -25,14 +25,14 @@ Layout: `pages/<slug>/index.md` (the report), `sources/<slug>/` (CSVs the notebo
 `partials/brand.md` (all shared CSS), `evidence.config.yaml` (theme), `deploy.sh`,
 `export-pdf.sh`, `exports/` (gitignored scratch output).
 
-The repo root `CLAUDE.md` holds the data traps that make numbers wrong (auth, D-2 freshness,
+The repo root `CLAUDE.md` holds the data traps that make numbers wrong (auth, export freshness,
 param value types, `form_submit` over-firing, dead events, spam, materialized tables). Read it
 before trusting any query. This skill governs the pipeline and the report content.
 
 Two modes:
 
 - **Refresh** - an existing slug: re-run its notebook, rebuild, review, deploy, re-export the PDF
-  (steps 1 to 7).
+  (steps 1 to 8).
 - **New** - a business question: scaffold a fresh slug, then run the same chain (N1 to N5).
 
 ## 0 - Pick the mode, then preflight
@@ -79,7 +79,7 @@ Preflight runs in both modes, **before any BigQuery touch**:
 - The BigQuery project is pinned inside the notebooks.
 
 - No report currently reads the GA4 Data API; every one of them queries BigQuery. If a report
-  ever does need fresh, sub-D-2 numbers, the Data API is the route (see `docs/config/ga4.md`),
+  ever does need numbers fresher than the export, the Data API is the route (see `docs/config/ga4.md`),
   it authenticates with a different service account, and that account's key path is not recorded
   in this repo. Read it from private memory rather than hardcoding one.
 
@@ -244,7 +244,8 @@ tracked task (`wip/CU-<id>/brief.md` names it), close the loop:
 - Attach `docs/reports/<slug>.pdf` to the task with `clickup_attach_task_file`.
 - Comment with the TL;DR, one line, plus anything that qualifies the number: a partial window, a
   known-dead event, an excluded surface. Say it here rather than letting the stakeholder find it.
-- Check the definition of done in the brief item by item, and say which items are met.
+- Check the definition of done in the brief item by item, and say which items are met. Where the
+  brief names a decision, say what the answer means for it.
 
 Ask before posting to the tracker. This writes to a shared workspace, so it is confirm-gated like
 every other outward-facing step in this skill.
@@ -299,7 +300,7 @@ at build time.
 
 Continue at step 3. The checkpoint now covers both the data (counts, date ranges) and the draft:
 paste the TL;DR and the section list in chat so the analyst can judge the story without opening a
-browser. Then steps 4 to 7 as in Refresh.
+browser. Then steps 4 to 8 as in Refresh.
 
 ## Hard rules
 

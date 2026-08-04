@@ -8,7 +8,7 @@ user-invocable: true
 # tracking-spec
 
 The tracking pipeline, end to end: **define, spec, build, QA, ship**. It is the executable form of
-[`docs/sop/tracking-implementation.md`](../../../docs/sop/tracking-implementation.md).
+`docs/sop/tracking-implementation.md`.
 
 Two facts shape everything below. First, the container runs a clean **dataLayer event model**: the
 legacy DOM/click-listener tags were deleted in the dataLayer migration, so every custom event now
@@ -366,7 +366,9 @@ performance.getEntriesByType('resource')
   .map(r => new URLSearchParams(r.name.split('?')[1]).get('en'));
 ```
 
-Or use Tag Assistant, which is not subject to the redaction.
+Or use Tag Assistant, which is not subject to the redaction. A batched POST to `/g/collect`
+carries its event names in the body, not the URL, so an `en=` parse that comes up empty is
+inconclusive for post-load events - confirm from the `dataLayer` or Tag Assistant.
 
 The checklist:
 
@@ -403,10 +405,11 @@ as "ingestion problem" and sent the investigation the wrong way.
 |---|---|---|
 | GA4 DebugView / Realtime | about 5 minutes | the tag fires and the hit reaches GA4 |
 | GA4 standard reports | 24 to 48 hours | the params resolve as registered dimensions |
-| BigQuery `events_*` (finalized) | about D-2 | the full payload, queryable |
+| BigQuery `events_*` (finalized) | one to two days | the full payload, queryable |
 
-**There is no `events_intraday_*` table.** The newest finalized shard is D-2, so today and yesterday
-do not exist and a same-day change is invisible until that date exports. If the SOP or an older spec
+**There is no `events_intraday_*` table.** The newest finalized shard trails by a day or two -
+the session-start freshness line prints the real boundary - so a same-day change is invisible
+until its date exports. If the SOP or an older spec
 says `events_intraday_*`, **the SOP is stale** - flag it for the evergreen doc update in ship mode.
 
 A **503 on `/g/collect`** during automated prod QA is most likely bot-flagging of the automated
@@ -439,7 +442,10 @@ Run at D-2 or later. Four things this query does that a naive one does not:
 - reports param **presence rate per day**, not mere presence, so partial coverage is visible (a
   `form_name` regression sat at 4.2% and read as "present");
 - coalesces **`string_value`, `int_value` and `double_value`** before concluding a param is missing;
-- applies the **standing spam exclusion** via the canonical view.
+- applies the **standing spam exclusion** via the canonical view, with **`NOT EXISTS`, never
+  `NOT IN`** - a single NULL session id on either side of a `NOT IN` silently empties the result
+  or leaks rows, and during post-ship verification an empty result reads exactly like "the event
+  never fired".
 
 ```sql
 WITH ev AS (
@@ -465,7 +471,10 @@ SELECT
                                  AS param_presence_rate,
   COUNT(DISTINCT param_value)    AS distinct_values
 FROM ev
-WHERE session_id NOT IN (SELECT session_id FROM `your-gcp-project.analytics_reports.v_spam_sessions`)
+WHERE NOT EXISTS (
+  SELECT 1 FROM `your-gcp-project.analytics_reports.v_spam_sessions` spam
+  WHERE spam.session_id = ev.session_id
+)
 GROUP BY d
 ORDER BY d;
 ```
@@ -510,6 +519,7 @@ Nothing ships that is not written down. Work through this list and say which one
 | `docs/config/gtm.md` | container version, new tag/trigger inventory |
 | `docs/business/key-performance-indicators.md` | the event feeds a KPI row, or unblocks a blocked one |
 | `docs/dev/specs/<domain>/<subject>.md` | status line: shipped, QA'd, prod-verified |
+| the Validation section of this skill | a controlled vocabulary was extended; its "exactly these N" lists are snapshots |
 
 Two known drifts worth checking on any form work: `conventions.md` still lists fewer `form_type`
 values than `tracking-plan/form_submit.md` carries (the newer file is right); and the SOP still

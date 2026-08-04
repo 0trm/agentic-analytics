@@ -64,8 +64,9 @@ window.dataLayer.map((e, i) => [i, e.event, JSON.stringify(e.event_data || {})])
 
 **Absence of a hit is not proof of failure.** gtag batches post-load events and flushes them on
 unload, so click and scroll events are queued and will not appear before navigation. Never
-conclude "not firing" from a missing live hit. Confirm from the `dataLayer` push, or force a flush
-by navigating away, then re-read.
+conclude "not firing" from a missing live hit. Confirm from the `dataLayer` push, or from Tag
+Assistant. A batched POST to `/g/collect` carries its event names in the request body, not the
+URL, so a URL parse that finds no `en=` is inconclusive for post-load events.
 
 ## What to check
 
@@ -104,8 +105,8 @@ recorded nothing for weeks because a staging-green build was never deployed. Sta
 you nothing about prod.
 
 Then verify ingestion by latency: GA4 DebugView or Realtime within about five minutes, then the
-finalized `events_*` export at D-2. There is no `events_intraday_*` table, so there is no rung
-between those two.
+finalized `events_*` export a day or two later - `bq ls` shows the real boundary. There is no
+`events_intraday_*` table, so there is no rung between those two.
 
 For the BigQuery check, delegate to the `bq-explore` agent rather than doing it here, and have it
 check param **presence rate per day** rather than mere presence, across all value types.
