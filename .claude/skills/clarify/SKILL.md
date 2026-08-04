@@ -7,8 +7,9 @@ user-invocable: true
 
 # clarify
 
-Step 4 of the analytics pipeline. A request has arrived and is not yet precise enough to execute.
-Draft the questions that would make it executable.
+The intake phase of the analytics pipeline - step 4 of its full numbering. A request has
+arrived and is not yet precise enough to execute. Draft the questions that would make it
+executable.
 
 The point is not to interrogate the stakeholder. It is to find the small number of ambiguities
 that would change the answer, ask only those, and state what you would assume otherwise so the
@@ -30,12 +31,12 @@ the questions specific rather than generic.
   what surfaces they fire on, when the event was introduced.
 - Check `docs/config/conventions.md` for the controlled vocabulary. A stakeholder saying
   "category pages" may mean `source_surface = 'category'`, or the path prefix, or both.
-- Check whether the event is alive. Several are known-dead: four forms were uninstrumented from
-  2026-07-03 to 2026-07-21, one section's outbound / scroll / social events since 2026-06-12. If
-  the request spans a dead window, that is not a clarifying question, it is a finding to lead
-  with.
-- Check the window is available. The newest finalized shard is D-2, and history starts where the
-  export starts. "Last 12 months" may not exist.
+- Check whether the event is alive. The current dead list, with dates, is the Zero-is-not-absence
+  trap in `CLAUDE.md`. If the request spans a dead window, that is not a clarifying question, it
+  is a finding to lead with.
+- Check the window is available. The newest finalized shard is whatever the session-start
+  freshness line reported - never assume - and history starts where the export starts. "Last 12
+  months" may not exist.
 
 ## 3 - Draft the questions
 
@@ -43,13 +44,13 @@ Aim for **two to four**. More than four means the request needs a conversation, 
 
 Ask only about things that change the work:
 
+- **The decision.** What will change based on the answer. Ask it first: the answer often
+  collapses the rest of the questions.
 - **Metric definition.** Sessions or events? Users or sessions? `form_submit` over-fires ~8x, so
   for anything form-shaped this is always worth pinning.
 - **Scope.** Which surfaces, which forms, which pages. Map their words onto the real vocabulary
   and offer the mapping, do not make them guess it.
 - **Window and comparison.** Against what baseline? Prior period, prior year, or a launch date?
-- **The decision.** What will change based on the answer. This one is worth asking almost always,
-  because it often collapses the rest of the questions.
 
 Do not ask about things you can decide: output format, whether to exclude spam (always yes),
 which table to read, how to break it down when the request implies it.

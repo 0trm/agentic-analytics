@@ -7,9 +7,9 @@ user-invocable: true
 
 # cupify
 
-Turn a request into a structured task. This is step 5 of the analytics pipeline: it converts a
-semi-structured ask into a ClickUp task with a definition of done, and lands a local brief that
-the execution session reads.
+Turn a request into a structured task. This is the structure phase of the analytics pipeline
+(step 5 of its full numbering): it converts a semi-structured ask into a ClickUp task with a
+definition of done, and lands a local brief that the execution session reads.
 
 Never invent scope. Two modes:
 
@@ -133,6 +133,10 @@ Opened: {date +%Y-%m-%d}
 
 ## Question
 {the actual question, one or two sentences}
+
+## Decision
+{what will change based on the answer, carried over from /clarify. Write
+_TODO: no decision named_ rather than inventing one.}
 
 ## Definition of done
 - [ ] {the concrete deliverable}

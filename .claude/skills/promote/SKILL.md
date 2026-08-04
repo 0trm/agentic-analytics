@@ -7,8 +7,8 @@ user-invocable: true
 
 # promote
 
-Step 13 of the analytics pipeline, and the only mechanism by which private knowledge becomes team
-knowledge. Run it weekly.
+The second half of the pipeline's compounding phase (step 13 of its full numbering), and the
+only mechanism by which private knowledge becomes team knowledge. Run it weekly.
 
 Memory is fast and private. `docs/` is durable, reviewable, and read by teammates. Facts that have
 proven themselves in memory belong in `docs/`, and the pull request is the moment that transition

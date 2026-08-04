@@ -50,8 +50,8 @@ you, and most of them are the reason a query returns a plausible number that is 
 Two additions specific to exploration:
 
 - **Verify freshness, do not assume it.** Confirm the real maximum shard with
-  `bq ls analytics_XXXXXXXXX` (free, metadata only) rather than assuming D-2 holds today. A
-  failed export means it could be D-3.
+  `bq ls analytics_XXXXXXXXX` (free, metadata only) rather than assuming yesterday's floor still
+  holds today. A failed export adds another day of lag.
 - **An empty result is a hypothesis, not an answer.** Before reporting "no data", check the
   param name against `docs/config/conventions.md`, check all three value types, and check the
   event was alive in that window. Most empty results here are naming assumptions.

@@ -35,7 +35,8 @@ Every item is a possible FAIL, not a suggestion.
 
 **Correctness**
 - The number answers the question in the brief, at the grain asked for.
-- Date window matches the brief, and does not extend past the newest finalized shard (D-2).
+- Date window matches the brief, and does not extend past the newest finalized shard - verify
+  it with `bq ls`, never assume (the Freshness trap in `CLAUDE.md` is the source).
 - Joins cannot fan out. `GROUP BY` matches the select list. Nulls and empties handled.
 - Sessions versus events: `form_submit` over-fires ~8x, so any form metric must count distinct
   sessions. Check this explicitly.
@@ -43,15 +44,15 @@ Every item is a possible FAIL, not a suggestion.
 
 **Validity**
 - Spam is excluded from every reported number, via `analytics_reports.v_spam_sessions`.
-- No known-dead event is being read as a real behavioural signal. Four forms were uninstrumented
-  from 2026-07-03 to 2026-07-21; one section's outbound / scroll / social events have been dead
-  since 2026-06-12. A decline into one of these windows is an instrumentation artefact until
-  proven otherwise.
+- No known-dead event is being read as a real behavioural signal. The current dead list, with
+  dates, is the Zero-is-not-absence trap in `CLAUDE.md`; a decline into one of those windows is
+  an instrumentation artefact until proven otherwise.
 - No use of `card_click.source_surface` for scoping - it is mis-tagged `other` about 96% of the
   time. Scope by `page_path`.
 - No dependency on `analytics_seed` tables - the dataset is empty, only its two UDFs survive.
 
 **Framing**
+- The framing serves the decision named in the brief, where one is named.
 - Confounds named rather than buried: seasonality, a redesign, a tracking change mid-window,
   a traffic-mix shift.
 - Absolute numbers alongside percentages. "Down 40%" from 5 to 3 is noise.

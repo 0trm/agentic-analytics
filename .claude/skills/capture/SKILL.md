@@ -7,8 +7,8 @@ user-invocable: true
 
 # capture
 
-Step 12 of the analytics pipeline. Convert what this session learned into something the next
-session starts from.
+The first half of the pipeline's compounding phase (step 12 of its full numbering). Convert
+what this session learned into something the next session starts from.
 
 This skill exists as much to **keep memory small** as to write to it. The memory index loads into
 every session, so every entry is a permanent tax. Most of what feels worth remembering is not

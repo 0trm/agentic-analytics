@@ -5,7 +5,11 @@ delivered reports. This repo is the system that makes that workable - an agent h
 AI does the work while the human sets direction and holds the quality bar.
 
 The files are the production ones, sanitized. The company is "a startup", ids and event names are
-placeholders; the structure, skills, agents and rules are exactly what runs every day.
+placeholders; the structure, skills, agents and rules are exactly what runs every day. The
+knowledge and delivery trees - `docs/`, `src/`, `reporting/` - hold company data and stayed at
+work; what is published is the harness that operates them.
+
+![The work root: what this repo publishes, and the shape of what stayed at work](assets/repo-map.png)
 
 **Outline**
 
@@ -26,9 +30,9 @@ Data teams get organized three ways, and each buys one thing by giving up anothe
 
 A one-person function is the centralized model at its most extreme: one set of standards, and one
 brain as the queue. Its two classic failure modes - the backlog, and the distance from context -
-are exactly what this system attacks. Agents multiply throughput past what one pair of hands can
-do, and a clarification loop at intake closes the context gap. The result behaves like a hybrid
-team, without the headcount.
+are exactly what this system attacks. Agents take the throughput-bound work off the one pair of
+hands, and a clarification loop at intake closes the context gap. The target behaviour is the
+hybrid model's, without the headcount.
 
 ## Three ways to engage AI
 
@@ -52,7 +56,8 @@ matters most right now.** Two bounds come before speed:
 
 Within the right direction and under the accuracy bar, speed is what gets maximized: agents
 supply the speed, the human sets the direction and the bar. The metric is median time from
-request to delivery, guarded by rework iterations per task - rework climbing means the work is
+request to delivery, guarded by rework iterations per task; both are read from the task tracker,
+which every request enters at intake and leaves at delivery. Rework climbing means the work is
 pointed wrong or the bar is being missed, and either one makes a faster median meaningless.
 
 Every structural choice below traces back to one of those three. If a mechanism seems fussy, ask
@@ -64,6 +69,12 @@ A harness is three things: **model + tools + skills**. The model is rented (here
 Claude Code). Tools are what it can touch - a shell, BigQuery, a browser, the task tracker.
 Skills are written procedures it can be handed. Nothing below required custom infrastructure; it
 is markdown files, one shell script, and a folder convention, arranged deliberately.
+
+Two of the rails are enforced by the harness rather than written down as instructions: a
+[session-start hook](.claude/hooks/data-freshness.sh) prints the newest finalized export shard,
+so no session assumes data that does not exist yet, and
+[`settings.json`](.claude/settings.json) allowlists a narrow set of routine commands while
+denying `bq rm`/`bq cp` and reads of the credential paths outright.
 
 ### One repo is the whole system
 
@@ -85,10 +96,10 @@ stale.**
 
 `CLAUDE.md` is deliberately small, because everything in it costs context on every session. What
 earns a place there is the **Traps** section: each entry is a way this specific stack returns a
-*plausible number that is wrong* - an export that lags two days, a form event that over-fires 8x,
-events that died silently and still chart as zeros. Generic models know SQL; they do not know
-your park of silent errors. One line each, loaded always, is the cheapest accuracy mechanism
-that exists.
+*plausible number that is wrong* - a derived table that lags two days, a form event that
+over-fires 8x, events that died silently and still chart as zeros. Generic models know SQL; they
+do not know your park of silent errors. One line each, loaded always, is the cheapest accuracy
+mechanism in this system.
 
 ### The pipeline
 
@@ -97,26 +108,33 @@ everything else is structured and reviewed against the goal before it ships:
 
 ![The analytics pipeline: five phases across stakeholder, analyst and agent lanes, with four feedback loops](assets/pipeline.png)
 
-The four dashed loops are the accuracy mechanism, ordered by cost:
+The four dashed loops are the accuracy mechanism, and each is cheaper than the one after it:
 
-1. **Clarify at intake.** [`/clarify`](.claude/skills/clarify/SKILL.md) checks what the data can
-   actually answer and drafts the questions; the analyst approves and sends. A correction here is
-   free; the same correction after delivery costs the whole task.
-2. **Iterate inside the session.** Work runs against a written definition of done
-   ([`/cupify`](.claude/skills/cupify/SKILL.md) produces it), with schema hunts delegated to the
-   [`bq-explore`](.claude/agents/bq-explore.md) agent so exploration noise never crowds out
-   reasoning.
-3. **The QA gate.** The [`qa`](.claude/agents/qa.md) agent re-derives every result from the brief
-   by its own route before a human sees it - two routes agreeing is evidence; one route re-read
-   twice is not. For instrumentation, [`tracking-qa`](.claude/agents/tracking-qa.md) drives a
-   real browser against the spec instead.
-4. **Human review, last.** Because it lands on work that already passed QA, it is a direction and
-   framing check, not a correctness hunt.
+1. **Sharpen the ask, at intake.** [`/clarify`](.claude/skills/clarify/SKILL.md) checks what the
+   data can actually answer and drafts the questions - including the one that collapses the
+   rest: what decision will the answer change. The analyst approves and sends. A correction here
+   is free.
+2. **A QA FAIL returns to the session.** The [`qa`](.claude/agents/qa.md) agent re-derives every
+   result from the brief by its own route before a human sees it - two routes agreeing is
+   evidence; one route re-read twice is not. For instrumentation,
+   [`tracking-qa`](.claude/agents/tracking-qa.md) drives a real browser against the spec instead.
+   A FAIL costs a session iteration, not a delivery.
+3. **Human review reframes, last.** Because it lands on work that already passed QA, it is a
+   direction and framing check, not a correctness hunt.
+4. **Rework after delivery** - a stakeholder bouncing a delivered answer. It costs the whole
+   task, and the three loops before it exist to starve it.
 
-The loop this buys out of is the expensive one: a stakeholder bouncing a delivered answer.
-Delivery itself runs through [`/report`](.claude/skills/report/SKILL.md), and tracking work runs
-its own define-spec-build-QA-ship flow through
-[`/tracking-spec`](.claude/skills/tracking-spec/SKILL.md) - same idea, different contract.
+On the solid path between those loops, work runs against a written definition of done
+([`/cupify`](.claude/skills/cupify/SKILL.md) produces it, and the brief carries the decision the
+answer serves), with schema hunts delegated to the
+[`bq-explore`](.claude/agents/bq-explore.md) agent so exploration noise never crowds out
+reasoning.
+
+Delivery itself runs through [`/report`](.claude/skills/report/SKILL.md). Tracking work runs its
+own define-spec-build-QA-ship flow through
+[`/tracking-spec`](.claude/skills/tracking-spec/SKILL.md), which stops at a KPI gate: a proposed
+metric must feed a KPI row or a named decision, or it goes back to the requester to sharpen or
+drop.
 
 ### The compounding loop
 
