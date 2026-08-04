@@ -4,12 +4,11 @@ One person runs the whole analytics function of a startup: intake, tracking, war
 delivered reports. This repo is the system that makes that workable - an agent harness in which
 AI does the work while the human sets direction and holds the quality bar.
 
-The files are the production ones, sanitized. The company is "a startup", ids and event names are
+The files are the production ones, sanitized. The company is a startup, ids and event names are
 placeholders; the structure, skills, agents and rules are exactly what runs every day. The
-knowledge and delivery trees - `docs/`, `src/`, `reporting/` - hold company data and stayed at
-work; what is published is the harness that operates them.
+knowledge and delivery trees - `docs/`, `src/`, `reporting/` - hold company data; what is published is the harness that operates them.
 
-![The work root: what this repo publishes, and the shape of what stayed at work](assets/repo-map.png)
+![The work root: what this repo publishes](assets/repo-map.png)
 
 **Outline**
 
