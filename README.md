@@ -80,10 +80,8 @@ The stack underneath is an ordinary one, and this harness is shaped by it:
 | Verification | Chrome | Claude in Chrome, driven by [`tracking-qa`](.claude/agents/tracking-qa.md) |
 | Versioning | git, GitHub | `git` and `gh` CLIs; a PR when the diff should be reviewed |
 
-The third column is the part that matters: every surface is reachable as a CLI or an MCP server,
-which is what makes unattended agent work possible at all. Swap the vendors and the harness still
-holds - what follows is a consequence of *having* a collection layer, a warehouse and a delivery
-surface, not of these particular ones.
+Every surface is reachable as a CLI or an MCP server, which is what makes unattended agent work possible at all. Swap the vendors and the harness still
+holds - what follows is a consequence of *having* a collection layer, a warehouse and a delivery surface, not of these particular ones.
 
 Two of the rails are enforced by the harness rather than written down as instructions: a
 [session-start hook](.claude/hooks/data-freshness.sh) prints the newest finalized export shard,
@@ -96,7 +94,7 @@ denying `bq rm`/`bq cp` and reads of the credential paths outright.
 ### One repo is the whole system
 
 Knowledge and the tooling that operates on it live in one clone. Open the repo in Claude Code and
-the session assembles its own context - nothing is pasted in, nothing lives in one person's head:
+the session assembles its own context:
 
 ![What a session knows: the five stores and when each loads](assets/session-context.png)
 
