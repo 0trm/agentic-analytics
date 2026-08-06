@@ -68,6 +68,23 @@ Claude Code). Tools are what it can touch - a shell, BigQuery, a browser, the ta
 Skills are written procedures it can be handed. Nothing below required custom infrastructure; it
 is markdown files, one shell script, and a folder convention, arranged deliberately.
 
+The stack underneath is an ordinary one, and this harness is shaped by it:
+
+| Layer | Tool | How the agent reaches it |
+|---|---|---|
+| Collection | GA4, Google Tag Manager | Python + `google-auth` scripts in `src/gtm-api/` |
+| Warehouse | BigQuery, EU multi-region | `bq` CLI, read verbs allowlisted in [`settings.json`](.claude/settings.json) |
+| Analysis | Python, Jupyter `# %%` scripts | shell, through `uv run` |
+| Delivery | [Evidence](https://evidence.dev) on Cloudflare Pages | shell: `npm run build`, then `./deploy.sh` |
+| Intake and tasks | ClickUp | MCP server |
+| Verification | Chrome | Claude in Chrome, driven by [`tracking-qa`](.claude/agents/tracking-qa.md) |
+| Versioning | git, GitHub | `git` and `gh` CLIs; a PR when the diff should be reviewed |
+
+The third column is the part that matters: every surface is reachable as a CLI or an MCP server,
+which is what makes unattended agent work possible at all. Swap the vendors and the harness still
+holds - what follows is a consequence of *having* a collection layer, a warehouse and a delivery
+surface, not of these particular ones.
+
 Two of the rails are enforced by the harness rather than written down as instructions: a
 [session-start hook](.claude/hooks/data-freshness.sh) prints the newest finalized export shard,
 so no session assumes data that does not exist yet, and
@@ -97,9 +114,10 @@ stale.**
 `CLAUDE.md` is deliberately small, because everything in it costs context on every session. What
 earns a place there is the **Traps** section: each entry is a way this specific stack returns a
 *plausible number that is wrong* - a derived table that lags two days, a form event that
-over-fires 8x, events that died silently and still chart as zeros. Generic models know SQL; they
-do not know your park of silent errors. One line each, loaded always, is the cheapest accuracy
-mechanism in this system.
+over-fires 8x, events that died silently and still chart as zeros. Every one of them is a
+property of the stack above: the export lags, GTM lazy-loads, the events table nests its params
+three ways. A generic model knows SQL and it knows GA4; it does not know *this* park of silent
+errors. One line each, loaded always, is the cheapest accuracy mechanism in this system.
 
 ### The pipeline
 
