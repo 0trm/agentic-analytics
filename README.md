@@ -1,10 +1,10 @@
-# agentic-analytics
+# agentic-analytics–for-startups
 
 One person runs the whole analytics function of a startup: intake, tracking, warehouse, QA,
 delivered reports. This repo is the system that makes that workable - an agent harness in which
 AI does the work while the human sets direction and holds the quality bar.
 
-The files are the production ones, sanitized. The company is a startup, ids and event names are
+The files are the production ones. The company is a startup, ids and event names are
 placeholders; the structure, skills, agents and rules are exactly what runs every day. The
 knowledge and delivery trees - `docs/`, `src/`, `reporting/` - hold company data; what is published is the harness that operates them.
 
@@ -19,7 +19,7 @@ knowledge and delivery trees - `docs/`, `src/`, `reporting/` - hold company data
 
 ## Where analytics sits in an org
 
-Data teams get organized three ways, and each buys one thing by giving up another:
+Data teams get organized three ways, and with trade-offs:
 
 | Model | Wins | Loses |
 |---|---|---|
@@ -31,7 +31,7 @@ A one-person function is the centralized model at its most extreme: one set of s
 brain as the queue. Its two classic failure modes - the backlog, and the distance from context -
 are exactly what this system attacks. Agents take the throughput-bound work off the one pair of
 hands, and a clarification loop at intake closes the context gap. The target behaviour is the
-hybrid model's, without the headcount.
+hybrid model's without the headcount.
 
 ## Three ways to engage AI
 
@@ -59,8 +59,7 @@ request to delivery, guarded by rework iterations per task; both are read from t
 which every request enters at intake and leaves at delivery. Rework climbing means the work is
 pointed wrong or the bar is being missed, and either one makes a faster median meaningless.
 
-Every structural choice below traces back to one of those three. If a mechanism seems fussy, ask
-which bound it enforces.
+Every structural choice below traces back to one of those three.
 
 ## The system
 
