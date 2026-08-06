@@ -1,4 +1,4 @@
-# agentic-analytics–for-startups
+# agentic-analytics-for-startups
 
 One person runs the whole analytics function of a startup: intake, tracking, warehouse, QA,
 delivered reports. This repo is the system that makes that workable - an agent harness in which
